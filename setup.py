@@ -2,13 +2,13 @@ import setuptools
 
 
 setuptools.setup(
-    name="ShareClass",
+    name="adstools",
     version="1.0",
     author="Beall",
-    author_email="beallhuang@163.com",
-    description="",
-    long_description="ShareClass",
-    long_description_content_type="ShareClass",
+    author_email="admire1971@outlook.com",
+    description="admire's tools",
+    long_description="admire's tools",
+    long_description_content_type="admire's tools",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
