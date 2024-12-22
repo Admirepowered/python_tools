@@ -7,13 +7,13 @@ import subprocess
 
 def get_processor_id():
     system_platform = platform.system()
-    
-    if system_platform == "Linux":
+    print(system_platform)
+    if "Linux" in system_platform:
         # 对于 Linux 系统，从 /proc/cpuinfo 获取处理器ID
         try:
             with open('/proc/cpuinfo', 'r') as f:
                 for line in f:
-                    if "Serial" in line:
+                    if "model name" in line:
                         return line.split(":")[1].strip()  # 返回序列号作为处理器ID
         except FileNotFoundError:
             print("无法读取 /proc/cpuinfo 文件")
@@ -152,7 +152,9 @@ class TCPClient:
             if not os.path.isfile(filename):
                 print(f"文件 {self.filename} 不存在！")
                 return
-            self.send_length_prefixed_data(filename.encode('utf-8'))  # 发送文件名
+            f = os.path.basename(filename)
+            print(f)
+            self.send_length_prefixed_data(f.encode('utf-8'))  # 发送文件名
             self.send_length_prefixed_data(self.target_dir.encode('utf-8'))  # 发送目标目录
 
             # 打开文件并发送内容
@@ -180,15 +182,20 @@ def main():
     
     mode = sys.argv[1]
     target_dir="./upload"
-    filename = sys.argv[2] if len(sys.argv) > 2 else None
+    
     if mode == "server":
         # 启动服务端
-        server = TCPServer(host='127.0.0.1', port=65432)
+        address = sys.argv[2] if len(sys.argv) > 2 else '127.0.0.1:65432'
+        host, port = address.split(':')
+        server = TCPServer(host=host, port=int(port))
         server_thread = threading.Thread(target=server.start)
         server_thread.start()
     elif mode == "client":
         # 启动客户端
-        client = TCPClient(host='127.0.0.1', port=65432, filename=filename, target_dir=target_dir)
+        address = sys.argv[2] if len(sys.argv) > 2 else '127.0.0.1:65432'
+        filename = sys.argv[3] if len(sys.argv) > 3 else None
+        host, port = address.split(':')
+        client = TCPClient(host=host, port=int(port), filename=filename, target_dir=target_dir)
         client.connect()
         client.send_file()
         client.close()
