@@ -28,10 +28,10 @@ jobs:
       - name: Checkout
         run: |
           python main.py
+          ls
       - name: Upload Dump file
         uses: actions/upload-artifact@v4
         with:
           name: Dump_File
           path: |
-            ls
             dumps
