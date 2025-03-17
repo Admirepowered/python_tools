@@ -1,0 +1,30 @@
+name: Test python
+
+on:
+  push:
+    tags: [ "*" ]
+    branches: [ "main" ]
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    setps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Core Dump
+        id: in_coredmp
+        run: |
+          git clone https://github.com/gaogaotiantian/coredumpy
+          pip install -r coredumpy/requirements-dev.txt
+          cd coredumpy && make build && make install
+      
+      - name: Checkout
+        run: |
+          python main.py
