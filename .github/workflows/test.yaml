@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    setps:
+    steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
